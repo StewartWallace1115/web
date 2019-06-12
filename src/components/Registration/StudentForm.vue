@@ -8,8 +8,13 @@
             <li v-for="error in errors">{{ error }}</li>
           </ul>
         </div>
+        <div v-if="subErrors.length" class="step-1-subErrors" colspan="2">
+          <ul>
+            <li v-for="subError in subErrors">{{ subError }}</li>
+          </ul>
+        </div>
         <div class="step-1-text" colspan="2">
-          <b>Step 1 of 2: Choose your log-in details </b>
+          <b>Step 1 of 2: Choose your log-in details</b>
         </div>
         <label for="inputEmail">What's your email?</label>
         <input
@@ -20,7 +25,7 @@
           v-bind:class="{'form-control-invalid': invalidInputs.indexOf('inputEmail') > -1}"
           required
           autofocus
-        />
+        >
         <div class="description">
           We will only use your email to contact you about your account. See our
           Privacy Policy for more info.
@@ -33,7 +38,7 @@
           class="form-control"
           v-bind:class="{'form-control-invalid': invalidInputs.indexOf('inputPassword') > -1}"
           required
-        />
+        >
         <p class="password-guidelines">
           Keep your account safe by choosing a password with one number, one
           uppercase letter, and one lowercase letter.
@@ -42,9 +47,7 @@
           class="btn btn-lg btn-primary btn-block"
           type="submit"
           @click.prevent="nextPage()"
-        >
-          CONTINUE
-        </button>
+        >CONTINUE</button>
         {{ msg }}
       </div>
       <div v-else-if="step === 'step-2'">
@@ -57,7 +60,7 @@
         <table class="step-2-table">
           <tr>
             <td class="table-entry" colspan="2">
-              <b>Step 2 of 2: Tell us about yourself! </b>
+              <b>Step 2 of 2: Tell us about yourself!</b>
             </td>
           </tr>
           <tr class="question-row">
@@ -71,7 +74,7 @@
                 v-bind:class="{'form-control-invalid': invalidInputs.indexOf('firstName') > -1}"
                 required
                 autofocus
-              />
+              >
             </td>
 
             <td style="padding-left: 15px;">
@@ -81,25 +84,19 @@
                 v-bind:class="{'form-control-invalid': invalidInputs.indexOf('lastName') > -1}"
                 required
                 autofocus
-              />
+              >
             </td>
           </tr>
           <tr>
             <td class="table-entry">
-              <div class="description" style="padding-bottom: 0px;">
-                First Name
-              </div>
+              <div class="description" style="padding-bottom: 0px;">First Name</div>
             </td>
             <td class="table-entry">
-              <div class="description" style="padding-bottom: 0px;">
-                Last Name
-              </div>
+              <div class="description" style="padding-bottom: 0px;">Last Name</div>
             </td>
           </tr>
           <tr class="question-row">
-            <td class="table-entry" colspan="2">
-              What high school do you go to?
-            </td>
+            <td class="table-entry" colspan="2">What high school do you go to?</td>
           </tr>
           <tr>
             <td colspan="2">
@@ -109,7 +106,7 @@
                 v-bind:class="{'form-control-invalid': invalidInputs.indexOf('highSchool') > -1}"
                 required
                 autofocus
-              />
+              >
             </td>
           </tr>
           <tr class="question-row">
@@ -131,42 +128,31 @@
             </td>
           </tr>
           <tr class="question-row">
-            <td class="table-entry" style="height: 50px;" colspan="2">
-              Do you get help from any of these organizations?
-            </td>
+            <td
+              class="table-entry"
+              style="height: 50px;"
+              colspan="2"
+            >Do you get help from any of these organizations?</td>
           </tr>
           <tr>
             <td colspan="2">
               <select class="form-control topic" v-model="profile.referred">
-                <option value="Big Brothers Big Sisters of NYC"
-                  >Big Brothers Big Sisters of NYC</option
-                >
-                <option value="Breakthrough New York"
-                  >Breakthrough New York</option
-                >
-                <option value="East Harlem Tutorial Program"
-                  >East Harlem Tutorial Program</option
-                >
+                <option value="Big Brothers Big Sisters of NYC">Big Brothers Big Sisters of NYC</option>
+                <option value="Breakthrough New York">Breakthrough New York</option>
+                <option value="East Harlem Tutorial Program">East Harlem Tutorial Program</option>
                 <option value="First Graduate">First Graduate</option>
-                <option value="Oasis - A Heaven for Women and Children"
-                  >Oasis - A Heaven for Women and Children</option
-                >
-                <option value="NYC Mission Society"
-                  >NYC Mission Society</option
-                >
+                <option
+                  value="Oasis - A Heaven for Women and Children"
+                >Oasis - A Heaven for Women and Children</option>
+                <option value="NYC Mission Society">NYC Mission Society</option>
                 <option value="None of the above">None of the above</option>
               </select>
             </td>
           </tr>
           <tr>
             <div class="agreement-box">
-              <input
-                id="userAgreement"
-                v-model="credentials.terms"
-                type="checkbox"
-                required
-              />
-              <label id="agreement" for="userAgreement" />
+              <input id="userAgreement" v-model="credentials.terms" type="checkbox" required>
+              <label id="agreement" for="userAgreement"/>
               <div class="agreement-label">
                 I have read and accept the
                 <a href="#/legal" target="_blank">user agreement</a>.
@@ -179,9 +165,7 @@
           class="btn btn-lg btn-primary btn-block"
           type="submit"
           @click="checkInputs($event)"
-        >
-          SIGN UP
-        </button>
+        >SIGN UP</button>
         {{ msg }}
       </div>
       <div v-else>Unexpected Error</div>
@@ -190,119 +174,119 @@
 </template>
 
 <script>
-import validator from "validator";
+import validator from 'validator'
 
-import AuthService from "src/services/AuthService";
-import UserService from "../../services/UserService";
+import AuthService from 'src/services/AuthService'
+import UserService from '../../services/UserService'
 
 export default {
   data() {
     return {
-      msg: "",
+      msg: '',
       errors: [],
       subErrors: [],
       invalidInputs: [],
       credentials: {
-        email: "",
-        password: "",
+        email: '',
+        password: '',
         terms: false
       },
       profile: {
-        firstName: "",
-        lastName: "",
-        highSchool: "",
-        heardFrom: "",
-        referred: ""
+        firstName: '',
+        lastName: '',
+        highSchool: '',
+        heardFrom: '',
+        referred: ''
       },
-      step: "step-1"
-    };
+      step: 'step-1'
+    }
   },
   methods: {
-    nextPage() {
+    nextPage () {
       // validate input
-      this.errors = [];
-      this.subErrors = [];
-      this.invalidInputs = [];
+      this.errors = []
+      this.subErrors = []
+      this.invalidInputs = []
       if (!this.credentials.email) {
-        this.errors.push("An email address is required.");
-        this.invalidInputs.push("inputEmail");
+        this.errors.push('An email address is required.')
+        this.invalidInputs.push('inputEmail')
       } else if (!validator.isEmail(this.credentials.email)) {
-        // this is necessary because browsers ignore <input type="email"> until the
+        // this is necessary because browsers ignore <input type='email'> until the
         // user actually tries to submit the form, which does not occur until step 2
         this.errors.push(
-          " '" + this.credentials.email + "' is not a valid email address."
-        );
-        this.invalidInputs.push("inputEmail");
+          ' "' + this.credentials.email + '" is not a valid email address.'
+        )
+        this.invalidInputs.push('inputEmail')
       }
       if (!this.credentials.password) {
-        this.errors.push("A password is required.");
-        this.invalidInputs.push("inputPassword");
+        this.errors.push('A password is required.')
+        this.invalidInputs.push('inputPassword')
       } else {
         if (this.credentials.password.length < 8) {
-          this.subErrors.push("8 characters");
-          this.invalidInputs.push("inputPassword");
+          this.subErrors.push('8 characters')
+          this.invalidInputs.push('inputPassword')
         }
         if (this.credentials.password.search(/[a-z]/) === -1) {
-          this.subErrors.push("1 lowercase letter");
-          this.invalidInputs.push("inputPassword");
+          this.subErrors.push('1 lowercase letter')
+          this.invalidInputs.push('inputPassword')
         }
         if (this.credentials.password.search(/[A-Z]/) === -1) {
-          this.subErrors.push("1 uppercase letter");
-          this.invalidInputs.push("inputPassword");
+          this.subErrors.push('1 uppercase letter')
+          this.invalidInputs.push('inputPassword')
         }
         if (this.credentials.password.search(/[0-9]/) === -1) {
-          this.subErrors.push("1 number");
-          this.invalidInputs.push("inputPassword");
+          this.subErrors.push('1 number')
+          this.invalidInputs.push('inputPassword')
         }
-        if (this.invalidInputs.includes("inputPassword")) {
-          this.errors.push("password must have at least: ");
+        if (this.invalidInputs.includes('inputPassword')) {
+          this.errors.push('password must have at least: ')
         }
       }
       if (this.errors.length) {
-        return;
+        return
       }
       AuthService.checkRegister(this, {
         email: this.credentials.email,
         password: this.credentials.password
       })
-        .then(() => {
-          this.step = "step-2";
+        .then (() => {
+          this.step = 'step-2'
         })
-        .catch(err => {
+        .catch (err => {
           if (
-            err.message === "The email address you entered is already in use"
+            err.message === 'The email address you entered is already in use'
           ) {
-            this.errors.push("The email address you entered is already in use");
-            this.invalidInputs.push("inputEmail");
+            this.errors.push('The email address you entered is already in use')
+            this.invalidInputs.push('inputEmail')
           }
-        });
+        })
     },
-    checkInputs(e) {
-      this.errors = [];
-      this.invalidInputs = [];
+    checkInputs (e) {
+      this.errors = []
+      this.invalidInputs = []
 
       if (!this.profile.firstName || !this.profile.lastName) {
-        this.errors.push("You must enter your first and last name.");
+        this.errors.push('You must enter your first and last name.')
       }
       if (!this.profile.firstName) {
-        this.invalidInputs.push("firstName");
+        this.invalidInputs.push('firstName')
       }
       if (!this.profile.lastName) {
-        this.invalidInputs.push("lastName");
+        this.invalidInputs.push('lastName')
       }
       if (!this.profile.highSchool) {
-        this.errors.push("Please enter the name of the high school you go to.");
-        this.invalidInputs.push("highSchool");
+        this.errors.push('Please enter the name of the high school you go to.')
+        this.invalidInputs.push('highSchool')
       }
       if (!this.credentials.terms) {
         // necessary because the CSS hides the browser's validation message
-        this.errors.push("You must read and accept the user agreement.");
+        this.errors.push('You must read and accept the user agreement.')
       }
       if (this.errors.length) {
-        e.preventDefault();
+        e.preventDefault()
       }
     },
-    submit() {
+    submit () {
       AuthService.register(this, {
         code: undefined,
         email: this.credentials.email,
@@ -312,7 +296,7 @@ export default {
         lastName: this.profile.lastName,
         highSchool: this.profile.highSchool
       })
-        .then(() => {
+        .then (() => {
           let user = UserService.getUser()
           /*
           user.firstname = this.profile.firstName
@@ -323,7 +307,7 @@ export default {
           user.referred = this.profile.referred
           UserService.setProfile(this, user, '/')
         })
-        .catch(err => {
+        .catch (err => {
           console.log(err)
           this.msg = err.message
         })
@@ -349,6 +333,18 @@ export default {
   font-size: 14px;
   color: #bf0000;
 }
+.step-1-subErrors {
+  list-style-type: square;
+  text-align: left;
+  margin-left: 40px;
+  font-size: 13px;
+  color: #bf0000;
+}
+/* ul.dashed:before {
+  margin-left: 20px;
+  content: "-";
+} */
+
 .login-link {
   color: #73737a;
   font-weight: 600;
@@ -427,7 +423,7 @@ label {
   margin-bottom: 0;
 }
 
-input[type='checkbox'] {
+input[type="checkbox"] {
   visibility: hidden;
   position: absolute;
   top: -9999px;
@@ -452,7 +448,7 @@ input[type='checkbox'] {
 
 .agreement-box label:after {
   opacity: 0;
-  content: '';
+  content: "";
   position: absolute;
   margin: 4px 0 0 3px;
   width: 8px;
@@ -464,7 +460,7 @@ input[type='checkbox'] {
   transform: rotate(-45deg);
 }
 
-.agreement-box input[type='checkbox']:checked + label:after {
+.agreement-box input[type="checkbox"]:checked + label:after {
   opacity: 1;
 }
 
@@ -479,7 +475,7 @@ input[type='checkbox'] {
   color: #16d2aa;
 }
 
-button[type='submit'] {
+button[type="submit"] {
   margin-top: 5px;
   background-color: #f6f6f6;
   border: none;
@@ -491,8 +487,8 @@ button[type='submit'] {
   margin-bottom: 10px;
 }
 
-button[type='submit']:hover,
-button[type='submit']:active {
+button[type="submit"]:hover,
+button[type="submit"]:active {
   color: white;
   background-color: #16d2aa;
 }
@@ -522,12 +518,9 @@ button[type='submit']:active {
   vertical-align: bottom;
 }
 
-
 @media screen and (max-width: 488px) {
   .btn-block {
     margin: 2.5em 0em 0em !important;
   }
-
-
 }
 </style>
