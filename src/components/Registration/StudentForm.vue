@@ -190,90 +190,119 @@
 </template>
 
 <script>
-import validator from 'validator';
+import validator from "validator";
 
-import AuthService from 'src/services/AuthService'
-import UserService from '../../services/UserService'
+import AuthService from "src/services/AuthService";
+import UserService from "../../services/UserService";
 
 export default {
-  data () {
+  data() {
     return {
-      msg: '',
+      msg: "",
       errors: [],
+      subErrors: [],
       invalidInputs: [],
       credentials: {
-        email: '',
-        password: '',
+        email: "",
+        password: "",
         terms: false
       },
       profile: {
-        firstName: '',
-        lastName: '',
-        highSchool: '',
-        heardFrom: '',
-        referred: ''
+        firstName: "",
+        lastName: "",
+        highSchool: "",
+        heardFrom: "",
+        referred: ""
       },
-      step: 'step-1'
-    }
+      step: "step-1"
+    };
   },
   methods: {
-    nextPage () {
+    nextPage() {
       // validate input
-      this.errors = []; this.invalidInputs = [];
+      this.errors = [];
+      this.subErrors = [];
+      this.invalidInputs = [];
       if (!this.credentials.email) {
-        this.errors.push('An email address is required.');
-        this.invalidInputs.push('inputEmail');
-      }
-      else if (!validator.isEmail(this.credentials.email)) {
+        this.errors.push("An email address is required.");
+        this.invalidInputs.push("inputEmail");
+      } else if (!validator.isEmail(this.credentials.email)) {
         // this is necessary because browsers ignore <input type="email"> until the
         // user actually tries to submit the form, which does not occur until step 2
-        this.errors.push(this.credentials.email + ' is not a valid email address.');
-        this.invalidInputs.push('inputEmail');
+        this.errors.push(
+          " '" + this.credentials.email + "' is not a valid email address."
+        );
+        this.invalidInputs.push("inputEmail");
       }
       if (!this.credentials.password) {
-        this.errors.push('A password is required.');
-        this.invalidInputs.push('inputPassword');
+        this.errors.push("A password is required.");
+        this.invalidInputs.push("inputPassword");
+      } else {
+        if (this.credentials.password.length < 8) {
+          this.subErrors.push("8 characters");
+          this.invalidInputs.push("inputPassword");
+        }
+        if (this.credentials.password.search(/[a-z]/) === -1) {
+          this.subErrors.push("1 lowercase letter");
+          this.invalidInputs.push("inputPassword");
+        }
+        if (this.credentials.password.search(/[A-Z]/) === -1) {
+          this.subErrors.push("1 uppercase letter");
+          this.invalidInputs.push("inputPassword");
+        }
+        if (this.credentials.password.search(/[0-9]/) === -1) {
+          this.subErrors.push("1 number");
+          this.invalidInputs.push("inputPassword");
+        }
+        if (this.invalidInputs.includes("inputPassword")) {
+          this.errors.push("password must have at least: ");
+        }
       }
       if (this.errors.length) {
         return;
       }
-    
       AuthService.checkRegister(this, {
         email: this.credentials.email,
         password: this.credentials.password
       })
         .then(() => {
-          this.step = 'step-2'
+          this.step = "step-2";
         })
         .catch(err => {
-          this.msg = err.message
-        })
+          if (
+            err.message === "The email address you entered is already in use"
+          ) {
+            this.errors.push("The email address you entered is already in use");
+            this.invalidInputs.push("inputEmail");
+          }
+        });
     },
-    checkInputs (e) {
-      this.errors = []; this.invalidInputs = [];
-      
+    checkInputs(e) {
+      this.errors = [];
+      this.invalidInputs = [];
+
       if (!this.profile.firstName || !this.profile.lastName) {
-        this.errors.push('You must enter your first and last name.');
+        this.errors.push("You must enter your first and last name.");
       }
       if (!this.profile.firstName) {
-        this.invalidInputs.push('firstName');
+        this.invalidInputs.push("firstName");
       }
       if (!this.profile.lastName) {
-        this.invalidInputs.push('lastName');
+        this.invalidInputs.push("lastName");
       }
       if (!this.profile.highSchool) {
-        this.errors.push('Please enter the name of the high school you go to.');
-        this.invalidInputs.push('highSchool');
+        this.errors.push("Please enter the name of the high school you go to.");
+        this.invalidInputs.push("highSchool");
       }
       if (!this.credentials.terms) {
         // necessary because the CSS hides the browser's validation message
-        this.errors.push('You must read and accept the user agreement.');
+        this.errors.push("You must read and accept the user agreement.");
       }
       if (this.errors.length) {
         e.preventDefault();
       }
     },
-    submit () {
+    submit() {
       AuthService.register(this, {
         code: undefined,
         email: this.credentials.email,
