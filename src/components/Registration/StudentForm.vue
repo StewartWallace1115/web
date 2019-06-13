@@ -52,7 +52,7 @@
       </div>
       <div v-else-if="step === 'step-2'">
         <div v-if="errors.length" class="step-2-errors" colspan="2">
-          <h5>Please correct the following problems:</h5>
+          <h5>Please correct the following:</h5>
           <ul>
             <li v-for="error in errors">{{ error }}</li>
           </ul>
