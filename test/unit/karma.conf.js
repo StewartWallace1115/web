@@ -3,10 +3,6 @@ process.env.CHROME_BIN = require('puppeteer').executablePath()
 
 module.exports = function (config) {
   config.set({
-    // to run in additional browsers:
-    // 1. install corresponding karma launcher
-    //    http://karma-runner.github.io/0.13/config/browsers.html
-    // 2. add it to the `browsers` array below.
     browsers: ['Chrome_no_sandbox'],
     customLaunchers: {
       Chrome_no_sandbox: {
@@ -20,11 +16,34 @@ module.exports = function (config) {
         ]
       }
     },
-    frameworks: ['mocha', 'sinon-chai'],
+    frameworks: ['mocha', 'sinon-chai','es6-shim'],
+    plugins: [
+ 'karma-sourcemap-loader',
+  'karma-webpack',
+     'karma-babel-preprocessor',
+'karma-mocha',
+'karma-sinon-chai',
+'karma-coverage',
+'karma-spec-reporter',
+'karma-chrome-launcher',
+'karma-es6-shim'
+    ],
+babelPreprocessor: {
+    options: {
+        "presets": ["es2015"],
+        "plugins": ["transform-es2015-modules-umd"]
+    }
+},
     reporters: ['spec', 'coverage'],
-    files: ['./index.js'],
+    files: [
+      'specs/**/*.spec.js',
+			'../../src/components/**/*.vue',
+      'https://code.jquery.com/jquery-1.11.2.min.js'
+    ],
     preprocessors: {
-      './index.js': ['webpack', 'sourcemap']
+ '**/*.spec.js': ['webpack', 'sourcemap','babel'],
+      './index.js': ['webpack', 'sourcemap','babel'],
+
     },
     webpack: webpackConfig,
     webpackMiddleware: {
